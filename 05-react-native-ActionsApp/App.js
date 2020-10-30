@@ -15,14 +15,14 @@ export default class App extends React.Component {
   state = {
     texteSaisie: "",
     actions: [],
-    filter: toutes,
+    filterON: toutes,
   };
 
   constructor(props) {
     super(props);
     this.onSupprimerAction = this.supprimerAction.bind(this);
     this.onTerminerAction = this.terminerAction.bind(this);
-    this.onFilterAction = this.filterAction.bind(this);
+    this.onFilterAction = this.filterActionState.bind(this);
   }
 
   /**
@@ -44,6 +44,9 @@ export default class App extends React.Component {
       estTermine: false,
     });
     this.setState({ texteSaisie: "" });
+
+    let activeFilter = this.state.filterON;
+    console.log("filter : ", activeFilter);
   }
 
   supprimerAction(index) {
@@ -54,13 +57,36 @@ export default class App extends React.Component {
 
   terminerAction(index) {
     //On passe l'état de l'action a terminé dans le state
+    console.log("termine !");
     const actions = this.state.actions;
     actions[index].estTermine = !actions[index].estTermine;
     this.setState({});
   }
 
-  filterAction(filter) {
-    // this.setState({ filter: filter });
+  filterAction() {
+    if (this.state.filter == toutes) {
+      return this.state.actions;
+    } else if (this.state.filter == actives) {
+      return this.state.actions.filter((action) => {
+        action.estTermine == false;
+      });
+    } else if (this.state.filter == terminees) {
+      return this.state.actions.filter((action) => {
+        action.estTermine == true;
+      });
+    }
+    return [];
+  }
+
+  filterActionState(selectedFilter) {
+    let key = Object.keys(selectedFilter)[0];
+    if (key == "toutes") {
+      this.setState({ filter: toutes });
+    } else if (key == "actives") {
+      this.setState({ filter: actives });
+    } else if (key == "terminees") {
+      this.setState({ filter: terminees });
+    }
   }
 
   render() {
@@ -75,7 +101,7 @@ export default class App extends React.Component {
             evtTexteModifie={(titre) => this.quandLaSaisieChange(titre)}
           />
           <ListeActions
-            actions={this.state.actions}
+            actions={this.filterAction()}
             onSupprimer={this.onSupprimerAction}
             onTerminer={this.onTerminerAction}
           />

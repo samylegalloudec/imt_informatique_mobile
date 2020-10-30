@@ -11,9 +11,12 @@ export const actives = "Actives";
 export const terminees = "Terminées";
 const Menu = (props) => (
   <View style={styles.menu}>
-    <OptionMenu title={toutes} onPress={props.onFilter({ toutes })} />
-    <OptionMenu title={actives} onPress={props.onFilter({ actives })} />
-    <OptionMenu title={terminees} onPress={props.onFilter({ terminees })} />
+    <OptionMenu title={toutes} onPress={() => props.onFilter({ toutes })} />
+    <OptionMenu title={actives} onPress={() => props.onFilter({ actives })} />
+    <OptionMenu
+      title={terminees}
+      onPress={() => props.onFilter({ terminees })}
+    />
   </View>
 );
 
